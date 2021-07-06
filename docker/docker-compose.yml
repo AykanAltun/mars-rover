@@ -1,0 +1,32 @@
+version: '2'
+
+services:
+    redis:
+        container_name: container_redis
+        image: redis:alpine
+        ports:
+            - "6379:6379"
+    php:
+        container_name: container_php
+        build:
+            context: php8-fpm
+            args:
+                TIMEZONE: ${TIMEZONE}
+        volumes:
+            - ${SYMFONY_APP_PATH}:/var/www/symfony
+            - ./logs/symfony:/var/www/symfony/var/log
+        links:
+            - redis
+    nginx:
+        container_name: container_nginx
+        build:
+            context: nginx
+            args:
+                MAX_EXECUTION_TIME: ${MAX_EXECUTION_TIME}
+                SERVER_NAME: ${SERVER_NAME}
+        ports:
+            - "80:80"
+        volumes_from:
+            - php
+        volumes:
+            - ./logs/nginx/:/var/log/nginx

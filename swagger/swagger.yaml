@@ -1,0 +1,229 @@
+openapi: 3.0.0
+info:
+  title: 'Mars Rover'
+  version: '0.1'
+servers:
+  -
+    url: 'http://localhost'
+    description: ''
+paths:
+  /api/v1/plateau:
+    post:
+      tags:
+        - Plateau
+      summary: 'Add Plateau'
+      description: 'Add a single plateau'
+      operationId: addPlateau
+      requestBody:
+        $ref: '#/components/requestBodies/PlateauRequest'
+      responses:
+        '201':
+          description: Success
+        '405':
+          description: 'Invalid Input'
+  '/api/v1/plateau/{id}':
+    get:
+      tags:
+        - Plateau
+      summary: 'List plateau'
+      description: 'List plateau according to id'
+      operationId: f4e9879c286763b8278d88f46bc652f2
+      parameters:
+        -
+          name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PlateauDto'
+        '404':
+          description: 'Plateau Not Found'
+  /api/v1/rover:
+    post:
+      tags:
+        - Rover
+      summary: 'Add Rover'
+      description: 'Add a single rover'
+      operationId: addRover
+      requestBody:
+        $ref: '#/components/requestBodies/RoverRequest'
+      responses:
+        '201':
+          description: Success
+        '405':
+          description: 'Invalid Input'
+  '/api/v1/rover/{id}':
+    get:
+      tags:
+        - Rover
+      summary: 'List rover'
+      description: 'List rover according to id'
+      operationId: 65ac800bfed6f0c03bab04aa4bf2c4d8
+      parameters:
+        -
+          name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RoverDto'
+        '404':
+          description: 'Rover Not Found'
+  '/api/v1/rover/{id}/state':
+    get:
+      tags:
+        - Rover
+      summary: 'List rover state'
+      description: 'List rover state according to id'
+      operationId: 5351f12e9bd0bd8e30e4e64e686a63ff
+      parameters:
+        -
+          name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RoverStateDto'
+        '404':
+          description: 'Rover Not Found'
+  '/api/v1/rover/{id}/send-commands':
+    post:
+      tags:
+        - Rover
+      summary: 'Send Command'
+      description: 'Send commands to rover'
+      operationId: sendCommand
+      parameters:
+        -
+          name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        $ref: '#/components/requestBodies/SendCommandRequest'
+      responses:
+        '201':
+          description: Success
+        '405':
+          description: 'Invalid Input'
+components:
+  schemas:
+    PlateauDto:
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        status:
+          type: string
+        xCoordinate:
+          type: integer
+        yCoordinate:
+          type: integer
+      type: object
+      xml:
+        name: PlateauDto
+    RoverDto:
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        status:
+          type: integer
+        plateau:
+          type: integer
+        xCoordinate:
+          type: integer
+        yCoordinate:
+          type: integer
+        direction:
+          type: string
+      type: object
+      xml:
+        name: RoverDto
+    RoverStateDto:
+      properties:
+        state:
+          type: string
+      type: object
+      xml:
+        name: RoverStateDto
+    PlateauRequest:
+      properties:
+        name:
+          type: string
+        status:
+          type: string
+        xCoordinate:
+          type: integer
+        yCoordinate:
+          type: integer
+      type: object
+      xml:
+        name: PlateauRequest
+    RoverRequest:
+      properties:
+        name:
+          type: string
+        status:
+          type: string
+        plateau:
+          type: string
+        xCoordinate:
+          type: integer
+        yCoordinate:
+          type: integer
+        direction:
+          type: string
+      type: object
+      xml:
+        name: RoverRequest
+    SendCommandRequest:
+      properties:
+        commands:
+          type: string
+      type: object
+      xml:
+        name: SendCommandRequest
+  requestBodies:
+    PlateauRequest:
+      description: 'Plateau request'
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/PlateauRequest'
+    RoverRequest:
+      description: 'Rover request'
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/RoverRequest'
+    SendCommandRequest:
+      description: 'Send command request'
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/SendCommandRequest'
